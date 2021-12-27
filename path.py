@@ -41,6 +41,8 @@ def get_immediate_subdirectories(path_dir):
 
     Returns:
         [list]: subdirectories list
+        
+    https://stackoverflow.com/questions/800197/how-to-get-all-of-the-immediate-subdirectories-in-python
     """
     return [os.path.join(path_dir, sub_dir) for sub_dir in os.listdir(path_dir)
             if os.path.isdir(os.path.join(path_dir, sub_dir))]

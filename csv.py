@@ -18,6 +18,9 @@ def write_csv(file_path):
         file_path ([str]): file path
         
     NOTE: just code snippet for further modification
+    
+    https://geek-docs.com/python/python-tutorial/python-csv.html
+
     """
     csv_file = open(file_path, 'w', newline='')
 

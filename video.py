@@ -44,6 +44,8 @@ def read_and_write_video(src_path, dst_path):
     # dst_file = cv2.VideoWriter(dst_path, cv2.VideoWriter_fourcc(*'X264'), fps, (width, height))
     dst_file = cv2.VideoWriter(dst_path, cv2.VideoWriter_fourcc(*'MJPG'), fps, (width, height))
     
+    # https://www.fourcc.org/codecs.php
+    
     while True:
         success, bgr_img = vidcap.read()
         if not success:

@@ -42,6 +42,9 @@ def rectify_bgr_img_read_by_opencv_for_bt709_video(bgr_image):
                             [-0.013428, -0.027936,  1.04124 ]])
     
     print(convert_mat)
+    
+    https://github.com/opencv/opencv/issues/20513
+    https://stackoverflow.com/questions/68629271/opencv-read-write-video-color-difference
 
     """
 

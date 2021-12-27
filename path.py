@@ -123,11 +123,28 @@ def rename_path(src_path, dst_path):
     os.rename(src_path, dst_path)
     
 def copy_file(src_path, dst_path, create_dir=True):
+    """copy file
+
+    Args:
+        src_path ([str]): source path
+        dst_path ([str]): destination path
+        create_dir (bool, optional): whether create dirs if not exists. Defaults to True.
+    """
     
     if create_dir:
         os.makedirs(os.path.dirname(dst_path), exist_ok=True)
     shutil.copyfile(src_path, dst_path)
 
+def remove_path(path):
+    """remove path
+
+    Args:
+        path ([str]): path
+    """
+    try:
+        shutil.rmtree(path)
+    except OSError as e:
+        print("Error: %s - %s." % (e.filename, e.strerror))
 
 if __name__ == '__main__':
     

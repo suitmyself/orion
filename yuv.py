@@ -135,13 +135,74 @@ def convert_709_limited_yuv_to_bgr(yuv_image):
     yuv_image_by_offset[:,:,2] = yuv_image[:,:,2] / 255.0 - 0.5
 
     #B
-    bgr_image[:,:,0] = 1.164 * yuv_image_by_offset[:,:,0] + 2.112 * yuv_image_by_offset[:,:,1] - 0.000 * yuv_image_by_offset[:,:,2]
+    bgr_image[:,:,0] = 1.164 * yuv_image_by_offset[:,:,0] + 2.112 * yuv_image_by_offset[:,:,1] + 0.000 * yuv_image_by_offset[:,:,2]
 
     #G
     bgr_image[:,:,1] = 1.164 * yuv_image_by_offset[:,:,0] - 0.213 * yuv_image_by_offset[:,:,1] - 0.533 * yuv_image_by_offset[:,:,2]
 
     #R
     bgr_image[:,:,2] = 1.164 * yuv_image_by_offset[:,:,0] + 0.000 * yuv_image_by_offset[:,:,1] + 1.793 * yuv_image_by_offset[:,:,2]
+    
+    bgr_image *= 255.0
+    
+    return np.clip(bgr_image, 0, 255).astype(np.uint8)
+
+def convert_bgr_to_601_limited_yuv(bgr_image):
+    """convert_bgr_to_601_limited_yuv
+
+    Args:
+        bgr_image (np.array): bgr image
+
+    Returns:
+        [type]: yuv 444 BT601 limited image
+    """
+    yuv_image = np.zeros_like(bgr_image, dtype='float')
+
+    bgr_image = bgr_image.astype(np.float)
+
+    #Y
+    yuv_image[:,:,0] = 16  + 0.257 * bgr_image[:,:,2] + 0.504 * bgr_image[:,:,1] + 0.098 * bgr_image[:,:,0]
+
+    #Cb
+    yuv_image[:,:,1] = 128 - 0.148 * bgr_image[:,:,2] - 0.291 * bgr_image[:,:,1] + 0.439 * bgr_image[:,:,0]
+
+    #Cr
+    yuv_image[:,:,2] = 128 + 0.439 * bgr_image[:,:,2] - 0.368 * bgr_image[:,:,1] - 0.071 * bgr_image[:,:,0]
+
+    yuv_image[:,:,0] = np.clip(yuv_image[:,:,0], 16, 235)
+    yuv_image[:,:,1] = np.clip(yuv_image[:,:,1], 16, 240)
+    yuv_image[:,:,2] = np.clip(yuv_image[:,:,2], 16, 240)
+
+    return yuv_image
+
+def convert_601_limited_yuv_to_bgr(yuv_image):
+    """convert_601_limited_yuv_to_bgr
+
+    Args:
+        bgr_image (np.array): yuv 444 BT601 limited image
+
+    Returns:
+        [type]: bgr image
+    """
+    
+    bgr_image = np.zeros_like(yuv_image, dtype='float')
+
+    yuv_image = yuv_image.astype(np.float)
+    
+    yuv_image_by_offset = np.zeros_like(yuv_image)
+    
+    yuv_image_by_offset[:,:,0] = yuv_image[:,:,0] / 255.0 - 16.0 /255.0
+    yuv_image_by_offset[:,:,1] = yuv_image[:,:,1] / 255.0 - 0.5
+    yuv_image_by_offset[:,:,2] = yuv_image[:,:,2] / 255.0 - 0.5
+
+    #B
+    bgr_image[:,:,0] = 1.164 * yuv_image_by_offset[:,:,0] + 2.017 * yuv_image_by_offset[:,:,1] + 0.000 * yuv_image_by_offset[:,:,2]
+
+    #G
+    bgr_image[:,:,1] = 1.164 * yuv_image_by_offset[:,:,0] - 0.392 * yuv_image_by_offset[:,:,1] - 0.813 * yuv_image_by_offset[:,:,2]
+
+    #R
+    bgr_image[:,:,2] = 1.164 * yuv_image_by_offset[:,:,0] + 0.000 * yuv_image_by_offset[:,:,1] + 1.596 * yuv_image_by_offset[:,:,2]
     
     bgr_image *= 255.0
     

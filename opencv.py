@@ -27,10 +27,12 @@ def rectify_bgr_img_read_by_opencv_for_bt709_video(bgr_image):
     It is accomplished by first convert to yuv using color matrix of BT601 limited range, and re-convert to rgb using color matrix of BT709 color matrix.
     These two matrix can be merged.  
     
+    #yuv --> rgb
     mat_709 = np.array([[1.164,  0.000,  1.793],
                         [1.164, -0.213, -0.533],
                         [1.164, 2.112, 0.000]])
-    
+
+    #rgb --> yuv
     mat_601 = np.array([[ 0.257,  0.504,  0.098],
                         [-0.148, -0.291,  0.439],
                         [0.439,  -0.368, -0.071]])

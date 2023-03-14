@@ -11,6 +11,7 @@
 
 import os
 import shutil
+import random
 
 def get_all_files_with_extension(path_dir, extensions = None):
     """get_all_files_with_extension
@@ -123,7 +124,35 @@ def rename_path(src_path, dst_path):
         dst_path ([str]): destination path
     """
     os.rename(src_path, dst_path)
+
+def swap_two_path(lhs_path, rhs_path):
+    """swap two path
+
+    Args:
+        lhs_path ([str]): first path
+        rhs_path ([str]): second path
+    """
     
+    os.rename(lhs_path, lhs_path + "_tmp_jkssvd")
+    os.rename(rhs_path, lhs_path)
+    os.rename(lhs_path + "_tmp_jkssvd", rhs_path)
+    
+def shuffle_files(files):
+    """shuffle files
+
+    Args:
+        files ([str]): files
+    """
+    
+    for file in files:
+        os.rename(file, file + "_tmp_jkssvd")
+    
+    random_files = files[:]
+    random.shuffle(random_files)
+    
+    for src_file, dst_file in zip(files, random_files):
+        os.rename(src_file + "_tmp_jkssvd", dst_file)
+
 def copy_file(src_path, dst_path, create_dir=True):
     """copy file
 

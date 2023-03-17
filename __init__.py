@@ -15,3 +15,4 @@ from . import opencv
 from . import yuv_reader
 from . import yuv
 from . import os
+from . import image

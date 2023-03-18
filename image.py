@@ -42,9 +42,7 @@ def concat_two_image_folder(first_image_dir, second_image_dir, dst_image_dir, ax
         dst_image_folder (string): dst image folder
         axis (int, optional): axis, Defaults to 1.
     """
-    
-    print(dir(path))
-    
+
     path.make_dirs(dst_image_dir)
     
     first_image_list = path.get_all_files_with_extension(first_image_dir)

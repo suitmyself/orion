@@ -42,3 +42,11 @@ def concat_four_videos_2x2(first_video_path, second_video_path, third_video_path
     cmd = f'ffmpeg -y -i {first_video_path} -i {second_video_path} -i {third_video_path} -i {fourth_video_path} \
             -filter_complex "[0:v][1:v][2:v][3:v]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0[v]" -map "[v]" {dst_video_path}'
     os.system(cmd)
+
+def recode_video(src_video, dst_video, qp = 18):
+    """
+    recode_video
+    """
+    
+    cmd = f'ffmpeg -y -i {src_video} -c:a copy -c:v libx264 -qp {qp} {dst_video}'
+    os.system(cmd)

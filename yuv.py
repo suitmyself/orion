@@ -291,11 +291,7 @@ def convert_bgr_to_601_full_yuv(bgr_image):
     #Cr
     yuv_image[:,:,2] = 128 + 0.500 * bgr_image[:,:,2] - 0.419 * bgr_image[:,:,1] - 0.081 * bgr_image[:,:,0]
 
-    yuv_image[:,:,0] = np.clip(yuv_image[:,:,0], 16, 235)
-    yuv_image[:,:,1] = np.clip(yuv_image[:,:,1], 16, 240)
-    yuv_image[:,:,2] = np.clip(yuv_image[:,:,2], 16, 240)
-
-    return yuv_image
+    return np.clip(yuv_image, 0, 255).astype(np.uint8)
 
 def convert_601_full_yuv_to_bgr(yuv_image):
     """convert_601_full_yuv_to_bgr

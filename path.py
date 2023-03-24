@@ -72,6 +72,18 @@ def extract_path_basename(path):
 
     return os.path.basename(path)
 
+def extract_path_basename_without_extension(path):
+    """extract_path_basename_without_extension
+
+    Args:
+        path ([str]): path
+
+    Returns:
+        [str]: path basebame, e.g., a/b/c.png --> c
+    """
+
+    return os.path.basename(path).split('.')[0]
+
 def extract_path_dirname(path):
     """extract_path_dirname
 

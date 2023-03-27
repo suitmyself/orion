@@ -118,3 +118,52 @@ def convert_hald8_image_to_512x512_lut(hald8_image_file, dst_lut_image_file = No
         lut_image.save(dst_lut_image_file)
         
     return lut_image
+
+
+def apply_3d_lut_for_cv_image(cv_image, cube_lut, factor = 1.0):
+    """
+    apply_3d_lut_for_cv_image
+
+    Args:
+        cv_image (np.array): opencv bgr image
+        cube_lut (ImageFilter.Color3DLUT): 3d cube lut filter of pillow 
+        factor (float, optional): blend factor. Defaults to 1.0.
+
+    Returns:
+        res_image: opencv bgr image
+    """
+    
+    pillow_image = Image.fromarray(cv_image[:,:,::-1]) # bgr --> rgb
+
+    lut_pillow_image = pillow_image.filter(cube_lut)
+    
+    lut_image = np.asarray(lut_pillow_image)[:,:,::-1] # rgb --> bgr
+    
+    res_image = cv_image * (1.0 - factor) + lut_image * factor
+
+    return res_image
+
+
+def apply_3d_lut_for_pillow_image(pillow_image, cube_lut, factor = 1.0):
+    """
+    apply_3d_lut_for_pillow_image
+
+    Args:
+        pillow_image (np.array): pillow rgb image
+        cube_lut (ImageFilter.Color3DLUT): 3d cube lut filter of pillow 
+        factor (float, optional): blend factor. Defaults to 1.0.
+
+    Returns:
+        res_image : pillow rgb image
+    """
+
+    lut_pillow_image = pillow_image.filter(cube_lut)
+    
+    cv_image = np.asarray(pillow_image)
+    lut_image = np.asarray(lut_pillow_image)
+    
+    res_image = cv_image * (1.0 - factor) + lut_image * factor
+    
+    res_image = Image.fromarray(res_image)
+
+    return res_image

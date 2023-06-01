@@ -10,10 +10,9 @@
 """
 
 import cv2
-from matplotlib import pyplot as plt
-
 import numpy as np
 
+from matplotlib import pyplot as plt
 
 def show_bgr_imgs(img_list: list):
     """show cv2.Mat BGR image using matplotlib.pyplot

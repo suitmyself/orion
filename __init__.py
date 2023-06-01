@@ -18,3 +18,6 @@ from . import os
 from . import image
 from . import ffmpeg
 from . import lut
+from . import filter
+from . import histogram
+from . import plt_show

@@ -14,6 +14,17 @@ import numpy as np
 
 from matplotlib import pyplot as plt
 
+def show_bgr_img(img: np.ndarray):
+    """show cv2.Mat BGR image using matplotlib.pyplot
+    
+    Args:
+        img (np.ndarray): BGR image
+    """
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
+
+
 def show_bgr_imgs(img_list: list):
     """show cv2.Mat BGR image using matplotlib.pyplot
     
@@ -32,7 +43,6 @@ def show_gray_img(img: np.ndarray):
     Args:
         img (np.ndarray): gray image
     """
-    gray = img.copy()
     gray = np.uint8(img) if img.max() > 1 else np.uint8(img * 255)
 
     plt.imshow(gray, cmap='gray')

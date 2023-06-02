@@ -34,7 +34,7 @@ def concat_two_image(first_image_file, second_image_file, dst_image_file, axis =
 
 def concat_two_image_folder(first_image_dir, second_image_dir, dst_image_dir, axis = 1):
     """
-    concat two image folder, image cancated for same file name
+    concat two image folder, image concatenated for same file name
 
     Args:
         first_image_folder (string): first image folder
@@ -56,5 +56,20 @@ def concat_two_image_folder(first_image_dir, second_image_dir, dst_image_dir, ax
             dst_image_file = dst_image_dir + "/" + image_basename
             concat_two_image(first_image_file, second_image_file, dst_image_file, axis = axis)
 
-            
+def get_image_dsize(src_image):
+    """
+    get image dsize
+
+    Args:
+        src_image (np.array): source image
+        
+    Returns: dsize tuple: (width, height), usually used by cv2.resize
+    """
+    
+    if src_image.ndim == 2:
+        return src_image.shape[::-1]
+    elif src_image.ndim == 3:
+        return src_image.shape[-2::-1]
+    else:
+        raise ValueError(f"error: unsupported ndim = {src_image.ndim}")
     

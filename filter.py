@@ -12,13 +12,13 @@
 import numpy as np
 import cv2
 
-def homomorphic_filter(src: cv2.Mat, cutoff_freq: int=200, gamma_low: float=0.5, gamma_high: float=2.0, sharp_factor: float=0.1, use_yuv: bool=False) -> cv2.Mat:
+def homomorphic_filter(src: np.ndarray, cutoff_freq: int=200, gamma_low: float=0.5, gamma_high: float=2.0, sharp_factor: float=0.1, use_yuv: bool=False) -> np.ndarray:
     """apply Histogram Equalization to image
     
     homomorphic_filter(src[, cutoff_freq, gamma_low, gamma_high, sharp_factor, use_yuv])
 
     Args:
-        src (cv2.Mat): origin BGR image or gray image
+        src (np.ndarray): origin BGR image or gray image
         cutoff_freq (int): cut-off frequency, controlling the truncation of the high frequency part
         gamma_low (float): gamma value of low frequency part, used to enhance or attenuate the low frequency part
         gamma_high (float): gamma value of high frequency part, used to enhance or attenuate the high frequency part
@@ -26,7 +26,7 @@ def homomorphic_filter(src: cv2.Mat, cutoff_freq: int=200, gamma_low: float=0.5,
         use_yuv (bool): use yuv or use hsv when input BGR image, default to use hsv
 
     Returns:
-        cv2.Mat: result BGR image or gray image with Histogram Equalization
+        np.ndarray: result BGR image or gray image with Histogram Equalization
     """
     gray = src.copy()
 

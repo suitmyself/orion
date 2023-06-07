@@ -13,17 +13,17 @@ import numpy as np
 import cv2
 
 
-def he(src: cv2.Mat, use_yuv: bool=True) -> cv2.Mat:
+def he(src: np.ndarray, use_yuv: bool=True) -> np.ndarray:
     """apply Histogram Equalization to image
     
     he(src[, use_yuv]) -> dst
 
     Args:
-        src (cv2.Mat): origin BGR image or gray image
+        src (np.ndarray): origin BGR image or gray image
         use_yuv (bool): use yuv or use hsv when input BGR image, default to use yuv
 
     Returns:
-        cv2.Mat: result BGR image or gray image with Histogram Equalization
+        np.ndarray: result BGR image or gray image with Histogram Equalization
     """
     gray = src.copy()
 
@@ -48,19 +48,19 @@ def he(src: cv2.Mat, use_yuv: bool=True) -> cv2.Mat:
     return dst
 
 
-def clahe(src: cv2.Mat, limit: float=0.8, grid: tuple=(33, 33), use_yuv: bool=True) -> cv2.Mat:
+def clahe(src: np.ndarray, limit: float=0.8, grid: tuple=(33, 33), use_yuv: bool=True) -> np.ndarray:
     """apply Contrast Limited Adaptive Histogram Equalization to image
     
     clahe(src[, limit, grid, use_yuv]) -> dst
 
     Args:
-        src (cv2.Mat): origin BGR image or gray image
+        src (np.ndarray): origin BGR image or gray image
         limit (float): contrast limiting threshold
         grid (tuple): grid size for histogram equalization
         use_yuv (bool): use yuv or use hsv when input BGR image, default to use yuv
 
     Returns:
-        cv2.Mat: result BGR image or gray image with histogram equalization
+        np.ndarray: result BGR image or gray image with histogram equalization
     """
     gray = src.copy()
 
@@ -84,3 +84,23 @@ def clahe(src: cv2.Mat, limit: float=0.8, grid: tuple=(33, 33), use_yuv: bool=Tr
             dst = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
     return dst
+
+
+def calculate_mean_and_variance(src: np.ndarray) -> tuple:
+    """Calculate Mean and Variance of gray image.
+
+    Args:
+        src (np.ndarray): gray image with [H, W]
+
+    Returns:
+        tuple: mean and variance of source gray image
+    """
+    # NOTE(Gao Jie): cv2.calcHist is faster than np.histogram
+    # hist, bins = np.histogram(src.ravel(), bins=256, range=[0, 256])
+    hist = cv2.calcHist([src], [0], None, [256], [0, 256]).ravel()
+    bins = list(range(257))
+
+    mean = np.sum(hist * bins[:-1]) / np.sum(hist)
+    variance = np.sum(hist * (bins[:-1] - mean) ** 2) / np.sum(hist)
+
+    return mean, variance

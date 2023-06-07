@@ -21,4 +21,3 @@ from . import lut
 from . import filter
 from . import histogram
 from . import plt_show
-from . import niqe

@@ -110,3 +110,24 @@ def show_img_with_hist(img: np.ndarray):
 
     plt.tight_layout()
     plt.show()
+
+
+def show_img_with_ycrcb_hist(img: np.ndarray):
+    """show histogram of np.ndarray gray image using matplotlib.pyplot
+    
+    Args:
+        img (np.ndarray): [B, G, R] image
+    """
+    ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    y, cr, cb = cv2.split(ycrcb)
+
+    fig, axs = plt.subplots(2, 2, figsize=(6, 8))
+    axs[0, 0].imshow(y, cmap='gray')
+    axs[0, 0].axis('off')
+
+    axs[0, 1].hist(y.ravel(), bins=256, range=[0, 256], color='g')
+    axs[1, 0].hist(cr.ravel(), bins=256, range=[0, 256], color='r')
+    axs[1, 1].hist(cb.ravel(), bins=256, range=[0, 256], color='b')
+
+    plt.tight_layout()
+    plt.show()

@@ -74,7 +74,7 @@ def convert_512x512_lut_to_hald8_image(lut_image_file, dst_hdld8_file = None):
                 
                 table[idx] = lut_image.getpixel((cx, cy))
                 
-    table = table.reshape((512,512, -1))
+    table = table.reshape((512, 512, -1))
     
     hald8_image =  Image.fromarray(table)
     
@@ -118,6 +118,57 @@ def convert_hald8_image_to_512x512_lut(hald8_image_file, dst_lut_image_file = No
         lut_image.save(dst_lut_image_file)
         
     return lut_image
+
+
+def generate_identity_512x512_lut(dst_lut_image_file = None):
+    """
+    generate_identity_512x512_lut
+    """
+    
+    table = np.zeros((512, 512, 3), dtype=np.uint8)
+    
+    for r in range(0, 64):
+        for g in range(0, 64):
+            for b in range(0, 64):
+                
+                block_y = b // 8
+                block_x = b % 8
+                
+                cy = 64 * block_y + g
+                cx = 64 * block_x + r
+                
+                table[cy, cx] = (r * 4, g * 4, b * 4)
+    
+    lut_image =  Image.fromarray(table)
+    
+    if dst_lut_image_file:
+        lut_image.save(dst_lut_image_file)
+        
+    return lut_image
+
+def generate_identity_hald8_image(dst_hdld8_file = None):
+    """
+    generate_identity_hald8_image
+    """
+
+    table = np.zeros((512*512, 3), dtype=np.uint8)
+    
+    for r in range(0, 64):
+        for g in range(0, 64):
+            for b in range(0, 64):
+                
+                idx = r + 64 * g + 64 * 64 * b
+                
+                table[idx] = (r * 4, g * 4, b * 4)
+                
+    table = table.reshape((512, 512, -1))
+    
+    hald8_image =  Image.fromarray(table)
+    
+    if dst_hdld8_file:
+        hald8_image.save(dst_hdld8_file)
+        
+    return hald8_image
 
 
 def apply_3d_lut_for_cv_image(cv_image, cube_lut, factor = 1.0):

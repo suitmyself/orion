@@ -48,6 +48,38 @@ def convert_512x512_lut_to_pillow_3d_lut_filter(lut_image_file):
     return ImageFilter.Color3DLUT((64, 64, 64), table, target_mode=None, _copy_table=False)
 
 
+def convert_1024x32_lut_to_pillow_3d_lut_filter(lut_image_file):
+    """
+    convert_1024x32_lut_to_pillow_3d_lut_filter
+    
+    reference:https://github.com/homm/pillow-lut-tools
+    file:https://github.com/homm/pillow-lut-tools/blob/master/pillow_lut/loaders.py
+    
+    """
+    
+    lut_image = Image.open(lut_image_file).convert('RGB')
+    
+    if lut_image.size[0] != 1024 or lut_image.size[1] != 32:
+        raise ValueError(f"Error: lut image size not equal 1024x32: {lut_image.size}")
+    
+    table = np.zeros((1024*32, 3), dtype=np.uint8)
+    
+    for r in range(0, 32):
+        for g in range(0, 32):
+            for b in range(0, 32):
+
+                cy = g
+                cx = 32 * b + r
+                
+                idx = r + 32 * g + 32 * 32 * b
+                
+                table[idx] = lut_image.getpixel((cx, cy))
+                
+    table = table.astype(np.float32) / 255.0
+
+    return ImageFilter.Color3DLUT((32, 32, 32), table, target_mode=None, _copy_table=False)
+
+
 def convert_512x512_lut_to_hald8_image(lut_image_file, dst_hdld8_file = None):
     """
     convert_512x512_lut_to_hald8_image
@@ -139,7 +171,7 @@ def generate_identity_512x512_lut(dst_lut_image_file = None):
                 
                 table[cy, cx] = (r * 4, g * 4, b * 4)
     
-    lut_image =  Image.fromarray(table)
+    lut_image = Image.fromarray(table)
     
     if dst_lut_image_file:
         lut_image.save(dst_lut_image_file)
@@ -215,6 +247,23 @@ def apply_3d_lut_for_pillow_image(pillow_image, cube_lut, factor = 1.0):
     
     res_image = cv_image * (1.0 - factor) + lut_image * factor
     
-    res_image = Image.fromarray(res_image)
+    res_image = Image.fromarray(res_image.astype(np.uint8))
 
     return res_image
+
+
+def convert_1024x32_lut_to_512x512_lut(lut_1024x32_image_file, dst_lut_512x512_image_file = None):
+    """
+    convert_1024x32_lut_to_512x512_lut
+    """
+    
+    cube_lut = convert_1024x32_lut_to_pillow_3d_lut_filter(lut_1024x32_image_file)
+    
+    identity_image = generate_identity_512x512_lut()
+    
+    res_512x512_lut = apply_3d_lut_for_pillow_image(identity_image, cube_lut)
+    
+    if dst_lut_512x512_image_file:
+        res_512x512_lut.save(dst_lut_512x512_image_file)
+        
+    return res_512x512_lut

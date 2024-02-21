@@ -3,9 +3,9 @@
 
 """
 @author      : Chen Wei
-@date        : 2021-12-27
-@file        : yuv_reader.py
-@description : yuv reader util
+@date        : 2024-1-10
+@file        : yuv_writer.py
+@description : yuv writer util
 @version     : 1.0
 """
 
@@ -16,7 +16,7 @@ import numpy as np
 
 #Note(Chen Wei): to improve futher
 
-class YuvReader:
+class YuvWriter:
     
     def __init__(self):
         """init empty reader"""
@@ -35,43 +35,26 @@ class YuvReader:
 
         self.framesize = int(self.width * self.height * 3 / 2)
 
-        self.filesize = os.path.getsize(filename)
-        self.framenum = int(self.filesize / self.framesize)
-
-        self.file = open(filename, 'rb')
+        self.file = open(filename, 'wb')
 
     def get_width(self):
         return self.width
 
     def get_height(self):
         return self.height
-
-    def get_file_size(self):
-        return self.filesize
-
-    def get_frame_num(self):
-        return self.framenum
     
     def get_frame_size(self):
         return self.framesize
+    
+    def write_frame(self, yuv):
 
-    def get_frame(self, idx):
-        if idx >= self.framenum:
-            raise IndexError("index out of range")
+        buffer = yuv.tobytes()
 
-        self.file.seek(idx * self.framesize)
+        self.file.write(buffer)
 
-        buffer = self.file.read(self.framesize)
-
-        yuv = np.frombuffer(buffer, np.uint8).reshape(int(self.height * 3 / 2), self.width)
-
-        return yuv
-
-    def get_frame_by_bgr(self, idx):
-
-        yuv = self.getFrame(idx)
+    def write_frame_by_bgr(self, bgr):
 
         #NOTE(Chen Wei): BT601 limited range ?
-        bgr = cv2.cvtColor(yuv, cv2.COLOR_YUV2BGR_I420)
+        yuv = cv2.cvtColor(bgr, cv2.COLOR_BGR2YUV_I420)
 
-        return bgr
+        self.write_frame(yuv)

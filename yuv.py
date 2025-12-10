@@ -114,6 +114,25 @@ def convert_bgr_to_709_limited_yuv(bgr_image):
 
     return yuv_image
 
+def convert_bgr_to_709_limited_yuv_single(b, g, r):
+    """convert_bgr_to_709_limited_yuv_single
+
+    Args:
+        b : blue channel
+        g : green channel
+        r : red channel
+    """
+
+    y = 16  + 0.183 * r + 0.614 * g + 0.062 * b
+    u = 128 - 0.101 * r - 0.339 * g + 0.439 * b
+    v = 128 + 0.439 * r - 0.399 * g - 0.040 * b
+
+    y = np.clip(y, 16, 235)
+    u = np.clip(u, 16, 240)
+    v = np.clip(v, 16, 240)
+
+    return y, u, v
+
 def convert_709_limited_yuv_to_bgr(yuv_image):
     """convert_709_limited_yuv_to_bgr
 
@@ -147,6 +166,35 @@ def convert_709_limited_yuv_to_bgr(yuv_image):
 
     return np.clip(bgr_image, 0, 255).astype(np.uint8)
 
+
+def convert_709_limited_yuv_to_bgr_single(y, u, v):
+    """convert_709_limited_yuv_to_bgr_single
+
+    Args:
+        y : y channel
+        u : u channel
+        v : v channel
+    """
+
+    y = y/255.0 - 16.0/255.0
+    u = u/255.0 - 0.5
+    v = v/255.0 - 0.5
+
+    b = 1.164 * y + 2.112 * u + 0.000 * v
+    g = 1.164 * y - 0.213 * u - 0.533 * v
+    r = 1.164 * y + 0.000 * u + 1.793 * v
+
+    b = np.clip(b * 255.0, 0, 255)
+    g = np.clip(g * 255.0, 0, 255)
+    r = np.clip(r * 255.0, 0, 255)
+
+    return b, g, r
+
+    g = np.clip(g, 0, 255)
+    r = np.clip(r, 0, 255)
+
+    return b, g, r
+
 def convert_bgr_to_709_full_yuv(bgr_image):
     """convert_bgr_to_709_full_yuv
 
@@ -174,6 +222,25 @@ def convert_bgr_to_709_full_yuv(bgr_image):
     yuv_image[:,:,2] = np.clip(yuv_image[:,:,2], 0, 255)
 
     return yuv_image
+
+def convert_bgr_to_709_full_yuv_single(b, g, r):
+    """convert_bgr_to_709_full_yuv_single
+
+    Args:
+        b : blue channel
+        g : green channel
+        r : red channel
+    """
+
+    y = 0   + 0.213 * r + 0.715 * g + 0.072 * b
+    u = 128 - 0.115 * r - 0.385 * g + 0.500 * b
+    v = 128 + 0.500 * r - 0.454 * g - 0.046 * b
+
+    y = np.clip(y, 0, 255)
+    u = np.clip(u, 0, 255)
+    v = np.clip(v, 0, 255)
+
+    return y, u, v
 
 def convert_709_full_yuv_to_bgr(yuv_image):
     """convert_709_full_yuv_to_bgr
@@ -208,6 +275,28 @@ def convert_709_full_yuv_to_bgr(yuv_image):
 
     return np.clip(bgr_image, 0, 255).astype(np.uint8)
 
+def convert_709_full_yuv_to_bgr_single(y, u, v):
+    """convert_709_full_yuv_to_bgr_single
+
+    Args:
+        y : y channel
+        u : u channel
+        v : v channel
+    """
+    y = y/255.0
+    u = u/255.0 - 0.5
+    v = v/255.0 - 0.5
+
+    b = 1.000 * y + 1.856 * u + 0.000 * v
+    g = 1.000 * y - 0.187 * u - 0.468 * v
+    r = 1.000 * y + 0.000 * u + 1.575 * v
+
+    b = np.clip(b * 255.0, 0, 255)
+    g = np.clip(g * 255.0, 0, 255)
+    r = np.clip(r * 255.0, 0, 255)
+
+    return b, g, r
+
 def convert_bgr_to_601_limited_yuv(bgr_image):
     """convert_bgr_to_601_limited_yuv
 
@@ -235,6 +324,24 @@ def convert_bgr_to_601_limited_yuv(bgr_image):
     yuv_image[:,:,2] = np.clip(yuv_image[:,:,2], 16, 240)
 
     return yuv_image
+
+def convert_bgr_to_601_limited_yuv_single(b, g, r):
+    """convert_bgr_to_601_limited_yuv_single
+
+    Args:
+        b : blue channel
+        g : green channel
+        r : red channel
+    """
+    y = 16 + 0.257 * r + 0.504 * g + 0.098 * b
+    u = 128 - 0.148 * r - 0.291 * g + 0.439 * b
+    v = 128 + 0.439 * r - 0.368 * g - 0.071 * b
+
+    y = np.clip(y, 16, 235)
+    u = np.clip(u, 16, 240)
+    v = np.clip(v, 16, 240)
+
+    return y, u, v
 
 def convert_601_limited_yuv_to_bgr(yuv_image):
     """convert_601_limited_yuv_to_bgr
@@ -269,6 +376,28 @@ def convert_601_limited_yuv_to_bgr(yuv_image):
 
     return np.clip(bgr_image, 0, 255).astype(np.uint8)
 
+def convert_601_limited_yuv_to_bgr_single(y, u, v):
+    """convert_601_limited_yuv_to_bgr_single
+
+    Args:
+        y : y channel
+        u : u channel
+        v : v channel
+    """
+    y = y/255.0 - 16.0/255.0
+    u = u/255.0 - 0.5
+    v = v/255.0 - 0.5
+
+    b = 1.164 * y + 2.017 * u + 0.000 * v
+    g = 1.164 * y - 0.392 * u - 0.813 * v
+    r = 1.164 * y + 0.000 * u + 1.596 * v
+
+    b = np.clip(b * 255.0, 0, 255)
+    g = np.clip(g * 255.0, 0, 255)
+    r = np.clip(r * 255.0, 0, 255)
+
+    return b, g, r
+
 def convert_bgr_to_601_full_yuv(bgr_image):
     """convert_bgr_to_601_full_yuv
 
@@ -292,6 +421,24 @@ def convert_bgr_to_601_full_yuv(bgr_image):
     yuv_image[:,:,2] = 128 + 0.500 * bgr_image[:,:,2] - 0.419 * bgr_image[:,:,1] - 0.081 * bgr_image[:,:,0]
 
     return np.clip(yuv_image, 0, 255).astype(np.uint8)
+
+def convert_bgr_to_601_full_yuv_single(b, g, r):
+    """convert_bgr_to_601_full_yuv_single
+
+    Args:
+        b : blue channel
+        g : green channel
+        r : red channel
+    """
+    y = 0   + 0.299 * r + 0.587 * g + 0.114 * b
+    u = 128 - 0.169 * r - 0.331 * g + 0.500 * b
+    v = 128 + 0.500 * r - 0.419 * g - 0.081 * b
+
+    y = np.clip(y, 0, 255)
+    u = np.clip(u, 0, 255)
+    v = np.clip(v, 0, 255)
+
+    return y, u, v
 
 def convert_601_full_yuv_to_bgr(yuv_image):
     """convert_601_full_yuv_to_bgr
@@ -325,5 +472,27 @@ def convert_601_full_yuv_to_bgr(yuv_image):
     bgr_image *= 255.0
 
     return np.clip(bgr_image, 0, 255).astype(np.uint8)
+
+def convert_601_full_yuv_to_bgr_single(y, u, v):
+    """convert_601_full_yuv_to_bgr_single
+
+    Args:
+        y : y channel
+        u : u channel
+        v : v channel
+    """
+    y = y/255.0
+    u = u/255.0 - 0.5
+    v = v/255.0 - 0.5
+
+    b = 1.000 * y + 1.772 * u + 0.000 * v
+    g = 1.000 * y - 0.344 * u - 0.714 * v
+    r = 1.000 * y + 0.000 * u + 1.402 * v
+
+    b = np.clip(b * 255.0, 0, 255)
+    g = np.clip(g * 255.0, 0, 255)
+    r = np.clip(r * 255.0, 0, 255)
+
+    return b, g, r
 
 #TODO(Chen Wei): add other versions
